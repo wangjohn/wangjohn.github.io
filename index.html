@@ -17,12 +17,19 @@
       <header>
         <h1>Much Obliged</h1>
         <p></p>
-
-
         <p class="view"><a href="https://github.com/wangjohn">John J. Wang</a></p>
-        <p class="view"><a href="https://github.com/wangjohn">MIT 2014</a></p>
-
+        <p class="view">MIT 2014</p>
+        <p class="view">This is my blog, mostly concerned about my work with Ruby on Rails, but containing other small snippets as well which I find interesting.</p>
       </header>
+      <section>
+      <ul>
+        {% for post in site.posts %}
+        <li>
+        <a href="{{ post.url }}">{{ post.title }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+      </section>
       <section>
         <h3>
 <a name="welcome-to-much-obliged" class="anchor" href="#welcome-to-much-obliged"><span class="octicon octicon-link"></span></a>Welcome to Much Obliged!</h3>
