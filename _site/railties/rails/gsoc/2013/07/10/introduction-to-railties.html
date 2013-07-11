@@ -18,28 +18,68 @@
   <p class="meta">10 Jul 2013</p>
 
   <div class="post">
-    <p>As part of my <a href='http://www.google-melange.com/gsoc/homepage/google/gsoc2013'>Google Summer of Code</a> project I&#8217;ll be refactoring Railtie, the internal engine of Ruby on Rails. When a Rails application launches, there is a complicated process of configuration and initialization that sets the Rails web server.</p>
+    <p>As part of my <a href='http://www.google-melange.com/gsoc/homepage/google/gsoc2013'>Google Summer of Code</a> project I&#8217;ll be refactoring Railties, the internal engine of Ruby on Rails. When a Rails application launches, there is a complicated process of configuration and initialization that sets the Rails web server.</p>
 
 <p>Before you can actually set up this web server, there are quite a few things that need to be configured. Railties are the engines for reading these configurations, creating an application, and connecting different parts of Rails.</p>
 
 <h3 id='the_railtie_class'>The Railtie Class</h3>
 
-<p>All major components of Rails are created as a subclass of Rails::Railtie. For example, Active Record (which handles query syntax to a database) and Action Controller (which handles the base controller logic) are both Railties.</p>
+<p>All major components of Rails are created as a subclass of <code>Rails::Railtie</code>. For example, Active Record (which handles query syntax to a database) and Action Controller (which handles the base controller logic) are both Railties.</p>
 
-<h4 id='so_what_does_railsrailtie_do'>So what does Rails::Railtie do?</h4>
+<h4 id='so_what_does__do'>So what does <code>Rails::Railtie</code> do?</h4>
 
-<p>Well, to figure out the function of Railtie, we can go look at the source code. Finding the definition isn&#8217;t too tricky. You can clone the Ruby on Rails source code from <a href='https://github.com/rails/rails'>github</a>. My primary method for finding class definitions is by using ack-grep, a convenient command line tool for searching through files. I searched for the following:</p>
+<p>Well, to figure out the function of <code>Railtie</code>, we can go look at the source code. Finding the definition isn&#8217;t too tricky. You can clone the Ruby on Rails source code from <a href='https://github.com/rails/rails'>github</a>. My primary method for finding class definitions is by using ack-grep, a convenient command line tool for searching through files. I searched for the following:</p>
 <div class='highlight'><pre><code class='bash'>ack-grep <span class='s2'>&quot;class Railtie&quot;</span>
 </code></pre></div>
-<p>This gives us the file which <a href='https://github.com/rails/rails/railties/lib/rails/railtie.rb'>&#8220;railties/lib/rails/railtie.rb&#8221;</a> which defines Railtie. A casual perusal of the file tells us a couple of things:</p>
+<p>This gives us the file which <a href='https://github.com/rails/rails/blob/master/railties/lib/rails/railtie.rb'>&#8220;railties/lib/rails/railtie.rb&#8221;</a> which defines <code>Railtie</code>. A casual perusal of the file tells us a couple of things:</p>
 
 <ol>
-<li>Railtie is abstract. This means that it is not intended for direct instantiation. This is pretty clear because there is an error which is thrown inside of the initialize method whenever the class attempting to be initialized is abstract. Also, the new method is private which is a pretty big hint.</li>
+<li><code>Railtie</code> is abstract. This means that it is not intended for direct instantiation. This is pretty clear because there is an error which is thrown inside of the <code>initialize</code> method whenever the class attempting to be initialized is abstract.</li>
 
-<li>Railtie has three main methods.</li>
+<li><code>Railtie</code> serves mostly as an API that should be subclassed. This observation comes directly from the observation that <code>Railtie</code> is abstract. Abstract classes usually define methods which should be overwritten in subclasses. The documentation also gives us a good clue, because it provides examples where one subclasses <code>Rails::Railtie</code> and configures that subclass.</li>
 
-<li>Railtie is based on a class.</li>
+<li><code>Railtie</code> has four main methods. These are <code>rake_tasks</code>, <code>console</code>, <code>runner</code>, and <code>generators</code>. For each of these methods, a block is added to a list of previously defined blocks. Here we can see <code>Railtie</code>&#8217;s true functionality: providing a way to configure anything which subclasses <code>Rails::Railtie</code>.</li>
+
+<li><code>Railtie</code> is class based. Notice that the <code>new</code> method is private. What this means is that <code>Railtie</code> cannot be instantiated unless a subclass makes the <code>new</code> method public. This is one of the most interesting design decisions made by the Rails developers. In particular, it means that each subclass of <code>Railtie</code> operates without any instances.</li>
 </ol>
+
+<h4 id='class_based_design'>Class Based Design</h4>
+
+<p>The last item I mentioned was the class based design of <code>Railtie</code>. To get a better sense of what this means, let&#8217;s look at an example of how one would create a <code>Railtie</code>. Since the <code>new</code> method is private, you can&#8217;t do the following:</p>
+<div class='highlight'><pre><code class='ruby'><span class='ss'>Rails</span><span class='p'>:</span><span class='ss'>:Railtie</span><span class='o'>.</span><span class='n'>new</span>
+</code></pre></div>
+<p>This would throw a runtime error saying that <code>new</code> is private. What is done instead to define a <code>Railtie</code> is this:</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>MyNewRailtie</span> <span class='o'>&lt;</span> <span class='ss'>Rails</span><span class='p'>:</span><span class='ss'>:Railtie</span>
+  <span class='n'>initializer</span> <span class='s2'>&quot;new_initialization_behavior&quot;</span> <span class='k'>do</span>
+    <span class='nb'>puts</span> <span class='s2'>&quot;Hello!&quot;</span>
+  <span class='k'>end</span>
+<span class='k'>end</span>
+</code></pre></div>
+<p>Something subtle is happening here. The <code>new_initialization_behavior</code> initializer is being defined on the class instead of on any particular instance of <code>MyNewRailtie</code>. Normally this would mean that all instances would have access to this initializer, but since you can&#8217;t instantiate <code>MyNewRailtie</code>, we don&#8217;t really worry about that.</p>
+
+<p>Instead, a singleton instance is created behind the scenes whenever you want to change the configuration of <code>MyNewRailtie</code>. Let&#8217;s examine the following code:</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>AnotherNewRailtie</span> <span class='o'>&lt;</span> <span class='ss'>Rails</span><span class='p'>:</span><span class='ss'>:Railtie</span>
+  <span class='n'>config</span><span class='o'>.</span><span class='n'>before_configuration</span> <span class='k'>do</span>
+    <span class='nb'>puts</span> <span class='s2'>&quot;This runs before the initializers run&quot;</span>
+  <span class='k'>end</span>
+<span class='k'>end</span>
+</code></pre></div>
+<p>We&#8217;re changing the configuration of <code>AnotherNewRailtie</code>, but we&#8217;re doing this by accessing the singleton of the <code>AnotherNewRailtie</code> class. In the code, this is called the <code>instance</code>. It&#8217;s defined as follows:</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>def</span> <span class='nf'>instance</span>
+  <span class='vi'>@instance</span> <span class='o'>||=</span> <span class='kp'>new</span>
+<span class='k'>end</span>
+</code></pre></div>
+<p>Thus, this method grabs either the cached object in <code>@instance</code> or creates a new <code>AnotherNewRailtie</code> object and sets <code>@instance</code> to this new object.</p>
+
+<p>All config methods inside of the class are sent to the instance, which will then configure the class. When you call <code>AnotherNewRailtie.config</code>, you will obtain the configuration from the singleton <code>instance</code>, with the <code>before_configuration</code> hook that we defined above.</p>
+
+<h3 id='discussion'>Discussion</h3>
+
+<p>Although the class based design of <code>Railtie</code> gives you a simple syntax for configuring subclasses of <code>Railtie</code> and referencing a particular subclass (just get it&#8217;s constant), it does run into some problems.</p>
+
+<p>The biggest problem is that you can&#8217;t easily create multiple <code>Rails::Application</code> instances. The <code>Rails::Application</code> class defines all of the backend logic for a Rails application, but you can&#8217;t make multiple applications unless you create multiple subclasses (which isn&#8217;t easy to do programatically) or unless you make the <code>new</code> method public (which destroys the API nature of <code>Railtie</code>).</p>
+
+<p>My <a href='http://www.google-melange.com/gsoc/proposal/review/google/gsoc2013/wangjohn/1'>GSOC project</a> will be attempting to fix some of these things, so stay tuned!</p>
   </div>
 
   <div class="post-end">
