@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Welcome to Jekyll!</title>
+        <title>Introduction to Railties</title>
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="/css/styles.css">
         <link rel="stylesheet" href="/css/pygment_trac.css">
@@ -13,10 +13,20 @@
         <![endif]-->
     </head>
     <body>
-      <h2>Welcome to Jekyll!</h2>
+      <h2>Introduction to Railties</h2>
 <p class="meta">10 Jul 2013</p>
 
 <div class="post">
+<p>As part of my <a href='http://www.google-melange.com/gsoc/homepage/google/gsoc2013'>Google Summer of Code</a> projects I&#8217;ll be refactoringRailties, the internal engine of Ruby on Rails. When a Rails application launches, there is a complicated process of configuration and initialization that sets the Rails web server.</p>
+
+<p>Before you can actually set up this web server, there are quite a few things that need to be configured. Ruby on Rails was developed under the <a href='http://www.google.com'>&#8220;convention before configuration&#8221;</a> mantra. What this means for you is that most of the configuration that needs to be done for a Rails web server has already been set - the defaults should take care of everything.</p>
+
+<p>Railties are the engines for reading these configurations, creating an application, and connecting different parts of Rails.</p>
+
+<h3 id='the_railtie_class'>The Railtie Class</h3>
+
+<p>All major components of Rails are created as a subclass of Rails::Railtie.</p>
+
 <p>You&#8217;ll find this post in your <code>_posts</code> directory - edit this post and re-build (or run with the <code>-w</code> switch) to see your changes! To add new posts, simply add a file in the <code>_posts</code> directory that follows the convention: YYYY-MM-DD-name-of-post.ext.</p>
 
 <p>Jekyll also offers powerful support for code snippets:</p>
@@ -26,7 +36,6 @@
 <span class='n'>print_hi</span><span class='p'>(</span><span class='s1'>&#39;Tom&#39;</span><span class='p'>)</span>
 <span class='c1'>#=&gt; prints &#39;Hi, Tom&#39; to STDOUT.</span>
 </code></pre></div>
-<p>Check out the <a href='http://jekyllrb.com'>Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href='https://github.com/mojombo/jekyll'>Jekyll&#8217;s GitHub repo</a>.</p>
 </div>
 
 <div class="post-end">
