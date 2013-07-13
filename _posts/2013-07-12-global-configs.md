@@ -1,6 +1,8 @@
 ---
 layout: post
-title: "Global Configurations"
+title:  "Global Configurations"
+date:   2013-07-12 18:35:37
+categories: rails gsoc
 ---
 
 One of the first things you learn as a programmer is that global configurations and variables are evil. Personally, it was hard to get someone to give me a convincing argument as to why this is true. In this post, I'll talk my explanation for the evils of global configs and also some instances when you might want to use them..
