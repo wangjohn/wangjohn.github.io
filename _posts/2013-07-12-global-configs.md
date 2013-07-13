@@ -5,7 +5,7 @@ date:   2013-07-12 18:35:37
 categories: rails gsoc
 ---
 
-One of the first things you learn as a programmer is that global configurations and variables are evil. Personally, it was hard to get someone to give me a convincing argument as to why this is true. In this post, I'll talk my explanation for the evils of global configs and also some instances when you might want to use them..
+One of the first things you learn as a programmer is that global configurations and variables are evil. Personally, it was hard to get someone to give me a convincing argument as to why this is true. In this post, I'll provide my explanation for the evils of global configs and also some instances when you might want to use them.
 
 ### Intro to Global Configs
 
@@ -35,7 +35,7 @@ class GlobalConfig
 end
 {% endhighlight %}
 
-This `GlobalConfig` class can be accessed from anywhere within my Ruby code (since I haven't scoped it at all). This will allow me to be inside of some class or module, yet still be able to access the `GlobalConfig`. We could have something like this:
+This `GlobalConfig` class stores a single `Configuration` object and can be accessed from anywhere within my Ruby code (since I haven't scoped it at all). This will allow me to be inside of some class or module, yet still be able to access the `GlobalConfig`. We could have something like this:
 
 {% highlight ruby %}
 module Rails
@@ -61,7 +61,7 @@ module Rails
 end
 {% endhighlight %}
 
-Notice that all of these classes can access the single `Configuration` object that is stored in `GlobalConfig`. This is essence of a global configuration: being able to access data from anywhere.
+Notice that all of these classes can access the singleton `Configuration` object that is stored in `GlobalConfig`. This is essence of a global configuration: being able to access a group of data from anywhere.
 
 ### Upsides and Downsides to Global Configurations
 
