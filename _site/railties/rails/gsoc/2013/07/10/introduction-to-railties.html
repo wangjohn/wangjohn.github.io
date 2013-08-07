@@ -31,10 +31,10 @@
 <p>Well, to figure out the function of <code>Railtie</code>, we can go look at the source code. Finding the definition isn&#8217;t too tricky. You can clone the Ruby on Rails source code from <a href='https://github.com/rails/rails'>github</a>. My primary method for finding class definitions is by using ack-grep, a convenient command line tool for searching through files. I searched for the following:</p>
 <div class='highlight'><pre><code class='bash'>ack-grep <span class='s2'>&quot;class Railtie&quot;</span>
 </code></pre></div>
-<p>This gives us the file which <a href='https://github.com/rails/rails/blob/master/railties/lib/rails/railtie.rb'>&#8220;railties/lib/rails/railtie.rb&#8221;</a> which defines <code>Railtie</code>. A casual perusal of the file tells us a couple of things:</p>
+<p>This gives us the file <a href='https://github.com/rails/rails/blob/master/railties/lib/rails/railtie.rb'>&#8220;railties/lib/rails/railtie.rb&#8221;</a> which defines <code>Railtie</code>. A casual perusal of the file tells us a couple of things:</p>
 
 <ol>
-<li><code>Railtie</code> is abstract. This means that it is not intended for direct instantiation. This is pretty clear because there is an error which is thrown inside of the <code>initialize</code> method whenever the class attempting to be initialized is abstract.</li>
+<li><code>Railtie</code> is abstract. This means that it is not intended for direct instantiation. This is pretty clear because there is an error which is thrown inside of the <code>initialize</code> method whenever the class attempting to be initialized is found in the <code>ABSTRACT_RAILTIES</code> constant.</li>
 
 <li><code>Railtie</code> serves mostly as an API that should be subclassed. This observation comes directly from the observation that <code>Railtie</code> is abstract. Abstract classes usually define methods which should be overwritten in subclasses. The documentation also gives us a good clue, because it provides examples where one subclasses <code>Rails::Railtie</code> and configures that subclass.</li>
 
@@ -64,14 +64,14 @@
   <span class='k'>end</span>
 <span class='k'>end</span>
 </code></pre></div>
-<p>We&#8217;re changing the configuration of <code>AnotherNewRailtie</code>, but we&#8217;re doing this by accessing the singleton of the <code>AnotherNewRailtie</code> class. In the code, this is called the <code>instance</code>. It&#8217;s defined as follows:</p>
+<p>We&#8217;re changing the configuration of <code>AnotherNewRailtie</code>, but we&#8217;re doing this by accessing the singleton of the <code>AnotherNewRailtie</code> class. In the code, the singleton is called the <code>instance</code>. It&#8217;s defined as follows:</p>
 <div class='highlight'><pre><code class='ruby'><span class='k'>def</span> <span class='nf'>instance</span>
   <span class='vi'>@instance</span> <span class='o'>||=</span> <span class='kp'>new</span>
 <span class='k'>end</span>
 </code></pre></div>
 <p>Thus, this method grabs either the cached object in <code>@instance</code> or creates a new <code>AnotherNewRailtie</code> object and sets <code>@instance</code> to this new object.</p>
 
-<p>All config methods inside of the class are sent to the instance, which will then configure the class. When you call <code>AnotherNewRailtie.config</code>, you will obtain the configuration from the singleton <code>instance</code>, with the <code>before_configuration</code> hook that we defined above.</p>
+<p>All <code>config</code> calls on the class are sent to the instance, which will then configure the class. When you call <code>AnotherNewRailtie.config</code>, you will obtain the configuration from the singleton <code>instance</code>, with the <code>before_configuration</code> hook that we defined above.</p>
 
 <h3 id='discussion'>Discussion</h3>
 
@@ -93,5 +93,14 @@
 
 
       <script src="javascripts/scale.fix.js"></script>
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-42432938-1', 'wangjohn.github.io');
+        ga('send', 'pageview');
+      </script>
     </body>
 </html>
