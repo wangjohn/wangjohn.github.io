@@ -29,7 +29,7 @@ Implementing the `isolate_namespace` method actually requires only a small amoun
 
 ## Generating Engine Name
 
-First, the method sets the `engine_name` by invoking `generate_railtie_name` on in module that was passed as an argument. This adds underscores to the module name. This means that whenever you call `engine_name` on the engine, you will receive an underscored and nicely readable representation of the module. For example:
+First, the method sets the `engine_name` by invoking `generate_railtie_name` on the module that was passed in as an argument. This adds underscores to the module name. This means that whenever you call `engine_name` on the engine, you will receive an underscored and nicely readable representation of the module. For example:
 
 {% highlight ruby %}
 MyEngine::Engine.engine_name # => my_engine
@@ -59,7 +59,16 @@ Methods for `table_name_prefix` and `use_relative_model_naming?` are similarly c
 
 ## Naming of Active Models
 
-Once these methods have been defined, one can check whether these methods exist. For example, inside of the ``ActiveModel::Naming`` module, we have the following logic:
+For example, the `use_relative_model_naming?` method is defined like so:
+{% highlight ruby %}
+mod.singleton_class.instance_eval do
+  unless mod.respond_to?(:use_relative_model_naming?)
+    class_eval "def use_relative_model_naming?; true; end", __FILE__, __LINE__
+  end
+end
+{% endhighlight %}
+
+Once this method has been defined, one can check whether it exists on a particular module. For example, inside of the ``ActiveModel::Naming`` module, we have the following logic:
 
 {% highlight ruby %}
 def model_name
@@ -74,11 +83,11 @@ end
 
 Thus, when Active Model looks for the name of a model, it will first detect whether or not is uses relative namespacing. The relative namespacing could be defined by using `isolate_namespace` inside of an engine. The Active Model logic is in charge of checking to see whether a relative namespace should be used.
 
-This paradigm is used throughout `isolated_namespace`. It involves defining a method which can be thought of as a configuration, then checking whether the method exists in the appropriate methods that need this configuration. For example, the paradigm is used for making sure that the helper methods in an isolated engine are isolated correctly.
+This paradigm is used throughout `isolated_namespace`. It involves defining a method which can be thought of as a configuration, then checking whether the method exists on a module when that configuration is needed. For example, the paradigm is used for making sure that the helper methods in an isolated engine are isolated correctly.
 
 ## Helper Methods
 
-The following two methods are defined on the singleton module:
+The following two methods are defined on the singleton module by `isolate_namespace`:
 
 {% highlight ruby %}
 unless mod.respond_to?(:railtie_helpers_paths)
@@ -113,9 +122,9 @@ end
 
 This defines a module which has an inherited hook (i.e. when the module is inherited, the `inherited` method is run). Inside of this hook, we can see that all of the modules inside of `routes.url` are included in the base class if there is no parent class which has defined the `railtie_routes_url_helpers` method. Otherwise, all of the modules inside of `namespace.railtie_routes_url_helpers` are included.
 
-Thus, under normal circumstances when `isolated_namespace` is not used, using `RoutesHelpers.with` will return a module which, once inherited, will include the `url_helpers` from the argument to `RoutesHelpers.with`. If the `railtie_routes_url_helpers` method is defined for some parent of the base class which is inherited, then the modules defined in this class will be inherited.
+Thus, under normal circumstances when `isolate_namespace` is not used, using `RoutesHelpers.with` will return a module which when inherited will include the `url_helpers` from the argument to `RoutesHelpers.with`. If the `railtie_routes_url_helpers` method is defined for some parent of the base class, then the modules defined in the `railtie_routes_url_helpers` will be inherited.
 
-Put more simply, if `isolate_namespace` has been used, then `RoutesHelpers.with` will detect the helpers that it needs to pull in based on whether or not a singleton method exists. This singleton method holds the correct helpers if `isolate_namespace` has been used. If the singleton method has not been defined, then `RoutesHelpers.with` falls back getting the normal helpers.
+Put more simply, if `isolate_namespace` has been used, then `RoutesHelpers.with` will detect the helpers that it needs to pull in based on whether or not a singleton method exists. This singleton method holds the correct helpers if `isolate_namespace` has been used. If the singleton method has not been defined, then `RoutesHelpers.with` falls back to getting the normal helpers.
 
 Inside of the Action Controller initializer, this machinery is put to good use in something that looks like this:
 
@@ -128,6 +137,10 @@ end
 {% endhighlight %}
 
 This finishes off the process of isolating the helpers by inheriting the module returned by `RoutesHelpers.with`.
+
+# Discussion
+
+It is quite useful to look at how `isolate_namespace` is implemented in Rails. It shows how you can use the presence of methods to indicate configurations. By defining singleton methods on a module, `isolate_namespace` signals to other modules that the module it is isolating has been configured in a particular way.
 
 [docs]: http://edgeapi.rubyonrails.org/classes/Rails/Engine.html#label-Isolated+Engine
 [isolatedef]: https://github.com/rails/rails/blob/master/railties/lib/rails/engine.rb#L374-L403
