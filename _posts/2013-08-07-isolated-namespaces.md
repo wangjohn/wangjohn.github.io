@@ -53,7 +53,7 @@ Here, the `railtie` variable refers to the `Engine` class inside of which the na
 
 {% highlight ruby %}
 MyEngine.railtie_namespace  # => MyEngine::Engine
-{% endhighlit %}
+{% endhighlight %}
 
 Methods for `table_name_prefix` and `use_relative_model_naming?` are similarly created on the singleton module.
 
