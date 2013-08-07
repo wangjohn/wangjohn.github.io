@@ -15,6 +15,12 @@ module MyEngine
 end
 {% endhighlight %}
 
+# Motivation
+
+This post will discuss how namespace isolation works in the `isolate_namespace` method. But first of all, why am I looking at this? It's related to my GSOC project to restructure railties. The restructuring requires that I eliminate global configurations and instead make them configurations that can coexist with multiple applications.
+
+The ability of `isolate_namespace` to change the namespace of an entire module does something that is very similar to removing global configuration, so studying this method should give a lot of insight for my project.
+
 # Overview of Namespace Isolation
 
 The Rails [documentation][docs] provides a good description of what namespace isolation actually accomplishes. The main things are:
