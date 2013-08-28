@@ -5,11 +5,13 @@ date:   2013-08-26 22:28:49
 categories: activerecord rails associations
 ---
 
-I haven't found an official guide for what Ruby code should look like in the Rails master branch. When committing patches to [Ruby on Rails][railsgithub], you're basically expected to follow an implicit coding style: "When in Rome, do as the Romans do."
+While doing my [Google Summer of Code][gsoc] project for Ruby on Rails, I had some trouble figuring out best practices for committing code. I haven't found an official and comprehensive guide for what Ruby code should look like in the Rails master branch. When committing patches to [Ruby on Rails][railsgithub], you're basically expected to follow an implicit coding style: "When in Rome, do as the Romans do."
 
 There is a tiny [official style guide][styleguide] for pull requests to Rails, but it doesn't cover all of the things you might find while writing Ruby code. In this post, I'll go through a couple of conventions that I've found are used throughout Rails code.
 
 However, I should preface everything I'm about to say with this: you shouldn't change code that is already in the codebase to conform with the style guidelines if it obscures the git history. Often it is tempting to change spacing or blatantly broken style, but you should refrain from doing it unless you are sure about it and have talked to a Rails Core Team member. While having consistent styling across the code is important, it is arguably more important for people to be able to find things easily in the git history.
+
+Also, these conventions are only my observations of what Rails code looks like. You shouldn't think of them as being comprehensive or even totally correct. If you really want to figure out some piece of code should be styled, you should talk to a Core Team member.
 
 ## Ruby Conventions
 
