@@ -18,11 +18,13 @@ However, I should preface everything I'm about to say with this: you shouldn't c
 3. A variable that can holds a reference to a class should usually be named `klass`. This is because `class` is a reserved keyword. See [this][klassdefinition] Stack Overflow article about it.
 4. Don't use the `return` keyword unless you are exiting from a method prematurely. Since the last result in a method is always returned in Ruby, it is redundant to add a return statement at the end of a method.
 5. Don't use ternaries if they will take up more than one line. It's very rare to see a long ternary in the Rails codebase, and it's generally preferred to write out the if statement instead.
-
+6. Try to namespace as much as possible. If you can, put something inside a well named module which can be easily ported around and included in other parts of the codebase. Modules, like their name implies, helps kee code modular and easy to read. Almost all of the Rails codebase is written in this modular format (except for a couple places in Railties).
+7. Try to keep the chaining of enumerable methods at a reasonable level. No one likes to go through the code and have to disentagle a jungle of `.map`, `.each`, `filter`, etc. If you can, try to only chain one or two enumerable methods together, save the result in a well named variable, and continue performing operations on the new variable. This makes the code much easier to read.
 
 ## Rails Specific Conventions
 
 1. Create new modules by autoloading. For example, [Active Record][activerecorddef] creates all of its modules by defining a module and naming the file in which it lives to be the underscored name of the module, then using `autoload` inside of the base class. Using `autoload` helps improve performance and also helps modularize the code.
+2. Know and use Active Support helpers. There are a bunch of methods like `mattr_accessor` or `delegate` which are incredibly useful and defined in Active Support. Use these methods instead of trying to implement analogs on your own.
 
 These are the conventions that I was able to collect by looking at Rails code. However, remember that the Rails codebase was built by thousands of contributors over many years, which means that these conventions are by no means strict.
 
