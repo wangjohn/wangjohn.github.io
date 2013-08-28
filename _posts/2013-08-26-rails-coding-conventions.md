@@ -11,7 +11,7 @@ There is a tiny [official style guide][styleguide] for pull requests to Rails, b
 
 However, I should preface everything I'm about to say with this: you shouldn't change code that is already in the codebase to conform with the style guidelines if it obscures the git history. Often it is tempting to change spacing or blatantly broken style, but you should refrain from doing it unless you are sure about it and have talked to a Rails Core Team member. While having consistent styling across the code is important, it is arguably more important for people to be able to find things easily in the git history.
 
-Also, these conventions are only my observations of what Rails code looks like. You shouldn't think of them as being comprehensive or even totally correct. If you really want to figure out some piece of code should be styled, you should talk to a Core Team member.
+Note, these conventions are only my observations of what Rails code looks like. You shouldn't think of them as being comprehensive or even totally correct. The Rails codebase was built by thousands of contributors over many years, so if you really want to figure out how some piece of code should be styled, you should talk to a Core Team member.
 
 ## Ruby Conventions
 
@@ -28,10 +28,10 @@ Also, these conventions are only my observations of what Rails code looks like. 
 1. Create new modules by autoloading. For example, [Active Record][activerecorddef] creates all of its modules by defining a module and naming the file in which it lives to be the underscored name of the module, then using `autoload` inside of the base class. Using `autoload` helps improve performance and also helps modularize the code.
 2. Know and use Active Support helpers. There are a bunch of methods like `mattr_accessor` or `delegate` which are incredibly useful and defined in Active Support. Use these methods instead of trying to implement analogs on your own, since these methods are more well-known and probably have better performance.
 
-These are the conventions that I was able to collect by looking at Rails code. However, remember that the Rails codebase was built by thousands of contributors over many years, which means that these conventions are by no means strict.
 
 [railsgithub]: https://github.com/rails/rails
 [styleguide]: http://edgeguides.rubyonrails.org/contributing_to_ruby_on_rails.html#follow-the-coding-conventions
 [tenderlovemethoddef]: http://tenderlovemaking.com/2013/03/03/dynamic_method_definitions.html
 [activerecorddef]: https://github.com/rails/rails/blob/master/activerecord/lib/active_record.rb
 [klassdefinition]: http://stackoverflow.com/questions/4299289/what-is-the-difference-between-class-and-klass-in-ruby
+[gsoc]: http://www.google-melange.com/gsoc/homepage/google/gsoc2013
