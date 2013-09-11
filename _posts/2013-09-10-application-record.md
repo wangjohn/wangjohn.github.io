@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Application Record"
+title:  "Active Record Configurations"
 date:   2013-09-10 22:34:12
 categories: activerecord rails railties
 ---
@@ -9,7 +9,7 @@ For my [Google Summer of Code][gsoc] project for Ruby on Rails, I've been trying
 
 Currently, there are a bunch of configurations that are set up through `ActiveRecord::Base` and are shared across Active Record. These configurations are global in a Ruby process and Rails application (since currently there is only a notion of a single application per process). Since the design of Rails originally only called for a single application, having these global configurations isn't a really big deal. It's only when you start trying to configure multiple applications at the same time when things become a headache.
 
-# Active Record Configurations
+# Setting Configurations
 
 The current state of configurations in Active Record isn't very pretty. Let's walk through the process of configuring the `pluralize_table_names` property. First, what you'll do is change `application.rb` file:
 
@@ -51,6 +51,8 @@ Basically, what this is saying is that Rails should take each of the configurati
 
 This would change the attribute on `ActiveRecord::Base`, so that `ActiveRecord::Base.pluralize_table_names == false`.
 
+## Running the Initializers (Addendum)
+
 Note that the application in the initializer which is referred to as `app` is the application which is being initialized. If you check out the `initialize!` method on the `Rails::Application` class, then you have the following definition:
 {% highlight ruby %}
 def initialize!(group=:default) #:nodoc:
@@ -62,5 +64,9 @@ end
 {% endhighlight %}
 
 The initializers are run with `self`, which in this context is the application being initialized. For example, I might call `initialize!` when booting up my application by using `MyApplicationName.initialize!`.
+
+# Application Record
+
+So now that we better understand configurations in Active Record, what is wrong, and how can we change it?
 
 [gsoc]: http://www.google-melange.com/gsoc/homepage/google/gsoc2013
