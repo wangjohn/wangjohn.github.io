@@ -65,8 +65,22 @@ end
 
 The initializers are run with `self`, which in this context is the application being initialized. For example, I might call `initialize!` when booting up my application by using `MyApplicationName.initialize!`.
 
-# Application Record
+# Discussion
 
 So now that we better understand configurations in Active Record, what is wrong, and how can we change it?
+
+First, let's notice that the Active Record configurations are defined directly on `ActiveRecord::Base`. That means you can access these configurations from anywhere that has Active Record loaded. For example, there are parts of the code that do this:
+
+{% highlight ruby %}
+def self.default_fixture_model_name(fixture_set_name) # :nodoc:
+  ActiveRecord::Base.pluralize_table_names ?
+    fixture_set_name.singularize.camelize :
+    fixture_set_name.camelize
+end
+{% endhighlight %}
+
+In this code, the `pluralize_table_names` configuration is directly accessed by some class method which is defined on the `FixtureSet` class. Theoretically, the `FixtureSet` class shouldn't know anything at all about the `pluralize_table_names` configuration except through parameters that it is passed.
+
+This can be good and bad. It's good because it's super easy to access a configuration. This is bad because it makes methods which use the access pattern very brittle. It is hard to change these methods if the application singleton is removed from Rails. It is also harder to reason about the code because these global configurations can be changed from anywhere.
 
 [gsoc]: http://www.google-melange.com/gsoc/homepage/google/gsoc2013
