@@ -17,8 +17,9 @@ Alternatively, just sitting on one value with the bomb doesn't work because the 
 
 In order to solve the problem, I find it useful to first simplify the problem into something that is easy to solve. You can make two easy simplifications. You want to destroy the submarine (you still have 1 bomb per time step), under the following conditions:
 
-  1. Submarine has `v=0` and unknown `p`.
-  2. Submarine has `p=0` and unknown `v` (and you start shooting at timestep `t=1`).
+    1.    Submarine has `v=0` and unknown `p`.
+
+    2.    Submarine has `p=0` and unknown `v` (and you start shooting at timestep `t=1`).
 
 
 ## No Velocity, Unknown Position
@@ -51,9 +52,9 @@ We will eventually blow up the submarine because for every possible velocity `v`
 
 Now that we've solved those two simpler problems, we can try to synthesize our knowledge to solve the more general problem. In particular, we've noticed a couple of things:
 
-    1. We can iterate over all possible integers in such a way that we will reach any arbitrary integer in finite time. We just need to use the sequence [0, 1, -1, 2, -2, ...].
+    1.    We can iterate over all possible integers in such a way that we will reach any arbitrary integer in finite time. We just need to use the sequence [0, 1, -1, 2, -2, ...].
 
-    2. We can test to see if the submarine has a particular starting position and velocity at any timestep `t`, by bombing the integer `p + vt`. If the submarine has starting position `p` and velocity `v`, then the submarine will have been destroyed.
+    2.    We can test to see if the submarine has a particular starting position and velocity at any timestep `t`, by bombing the integer `p + vt`. If the submarine has starting position `p` and velocity `v`, then the submarine will have been destroyed.
 
 # Full Solution
 
