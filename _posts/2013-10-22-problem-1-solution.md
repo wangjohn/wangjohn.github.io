@@ -68,4 +68,14 @@ To get the two-variable analog, just think about what we did with one-variable. 
 
 It's now clear that we can just start at the tuple (0,0) and make concentric squares about the origin. As time increases, you trace out parts of these concentric squares which are further and futher out from the origin. Tracing out these concentric squares will guarantee that you eventually bomb any arbitrary tuple `(p,v)` in finite time, which solves the problem. In fact, the only thing the algorithm needs to do is iterate over all possible pairs `(p,v)` in two dimensions, so other shapes like a spiral about the origin would also work.
 
+# The Bigger Picture
+
+Notice that if we had used real numbers instead of integers, this problem would be impossible. In fact, Cantor showed that the real numbers are uncountably infinite in his [diagonalization theorem][diagthm], which means that if I chose an arbitrary real number, there is no way to find it in finite time by iterating over all possible reals (thanks to Zack Maril for the pointer).
+
+If we look at this problem from a computer science perspective, we can see that the general solution idea pokes at a more fundamental principle. A computably enumerable set `S` is a set for which there exists an algorithm that enumerates the members of `S`. This concept is important because the mapping from the natural numbers to the enumerated set must be computable. The concept of computability and enumerability also moves into the purview of the [halting problem][haltprob].
+
+This problem only touches upon enumerability, but you can dig much deeper into computability and complexity theory.
+
 [prob1]: ({% post_url 2013-10-22-52-problems-in-52-weeks %})
+[diagthm]: http://en.wikipedia.org/wiki/Cantor's_diagonal_argument
+[haltprob]: http://en.wikipedia.org/wiki/Halting_problem
