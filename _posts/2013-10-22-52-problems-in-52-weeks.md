@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "52 CS Problems in 52 Weeks"
+title: "52 Problems in 52 Weeks"
 date: 2013-10-22 14:47:00
 categories: problems
 ---
@@ -17,6 +17,4 @@ The Rolling Stones would like to destroy the yellow submarine. At each time step
 
 Unfortunately, the Rolling Stones don't know `p` or `v`, they just know that both `p` and `v` are integers. Help the Stones devise an algorithm that will be guaranteed to destroy the yellow submarine in finite time.
 
-For example, let's say the the yellow submarine has `p = 3, v = 5`. Then at time step `t = 0`, the submarine is on the integer `3`. At time step `t=1`, the submarine is on integer `8`. At time step `t=2`, the submarine is on integer `13`, etc. If the Rolling Stones' algorithm was to always shoot the integer 13, then the bomb would miss on timesteps `t=0,1` but the bomb would destroy the submarine on timestep `t=2`. Obviously this algorithm doesn't work for all values of `p` and `v`.
-
-# Solution
+For example, let's say the the yellow submarine has `p = 3, v = 5`. Then at time step `t = 0`, the submarine is on the integer `3`. At time step `t=1`, the submarine is on integer `8`. At time step `t=2`, the submarine is on integer `13`, etc. If the Rolling Stones' algorithm was to always shoot the integer 13, then the bomb would miss on timesteps `t=0,1` but the bomb would destroy the submarine on timestep `t=2`. Obviously this algorithm doesn't work for all values of `p` and `v` (consider any starting position `p != 13` with zero velocity `v = 0`).
