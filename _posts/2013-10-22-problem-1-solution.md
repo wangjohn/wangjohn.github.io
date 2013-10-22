@@ -55,7 +55,6 @@ Now that we've solved those two simpler problems, we can try to synthesize our k
 1.    We can iterate over all possible integers in such a way that we will
       reach any arbitrary integer in finite time. We just need to use the
       sequence [0, 1, -1, 2, -2, ...].
-
 2.    We can test to see if the submarine has a particular starting position
       and velocity at any timestep `t`, by bombing the integer `p + vt`. If
       the submarine has starting position `p` and velocity `v`, then the
