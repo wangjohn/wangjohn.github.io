@@ -17,10 +17,8 @@ Alternatively, just sitting on one value with the bomb doesn't work because the 
 
 In order to solve the problem, I find it useful to first simplify the problem into something that is easy to solve. You can make two easy simplifications. You want to destroy the submarine (you still have 1 bomb per time step), under the following conditions:
 
-    1.    Submarine has `v=0` and unknown `p`.
-
-    2.    Submarine has `p=0` and unknown `v` (and you start shooting at timestep `t=1`).
-
+1.    Submarine has `v=0` and unknown `p`.
+2.    Submarine has `p=0` and unknown `v` (and you start shooting at timestep `t=1`).
 
 ## No Velocity, Unknown Position
 
