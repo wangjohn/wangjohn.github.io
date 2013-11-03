@@ -2,7 +2,7 @@
 layout: post
 title: "Problem 2"
 date: 2013-11-3 16:13:00
-categories problems, trees, algorithms
+categories: problems, trees, algorithms
 ---
 
 # Introduction

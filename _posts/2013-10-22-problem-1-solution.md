@@ -76,6 +76,6 @@ If we look at this problem from a computer science perspective, we can see that 
 
 This problem only touches upon enumerability, but you can dig much deeper into computability and complexity theory.
 
-[prob1]: ({% post_url 2013-10-22-52-problems-in-52-weeks %})
+[prob1]: {% post_url 2013-10-22-52-problems-in-52-weeks %}
 [diagthm]: http://en.wikipedia.org/wiki/Cantor's_diagonal_argument
 [haltprob]: http://en.wikipedia.org/wiki/Halting_problem
