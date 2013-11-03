@@ -146,7 +146,7 @@ header ul a {
   height:40px;
 }
 
-header .view {
+footer .view, header .view {
   font-size: small;
   text-align: center;
   font-weight: 50;
