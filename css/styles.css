@@ -146,6 +146,12 @@ header ul a {
   height:40px;
 }
 
+header .view {
+  font-size: small;
+  text-align: center;
+  font-weight: 50;
+}
+
 strong {
   color:#222;
   font-weight:700;
