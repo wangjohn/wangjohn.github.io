@@ -17,11 +17,43 @@ The simplest problem that we could solve would probably be a finite tree with ou
 
 {% highlight python %}
 def lca_same_level(vertex1, vertex2):
-  pointer1, pointer2 = vertex1, vertex2
-  while pointer1 != pointer2:
-    pointer1 = vertex1.parent
-    pointer2 = vertex2.parent
+  node1, node2 = vertex1, vertex2
+  while node1 != node2:
+    node1 = vertex1.parent
+    node2 = vertex2.parent
 
-  return pointer1
+  return node1
 {% endhighlight %}
 
+A second simplification to this problem is as follows: given a finite tree, find the lowest common ancestor of any two nodes. Notice that we've dropped the constraint of finding the lowest common ancestor of two nodes that are on the same level in the tree. This simplification isn't too hard to solve given our previous knowledge.
+
+We just need to turn the first problem into the second. We can do that by climbing all the way up to the root, figuring out the height of `vertex1` and `vertex2`, setting the heights the same, then calling `lca_same_level` on the resulting nodes. Let's write this up:
+
+{% highlight python %}
+def find_height(vertex):
+  node = vertex
+  height = 0
+  while node.parent != None:
+    height += 1
+    node = node.parent
+
+  return height
+
+def climb_parents(vertex, num_parents):
+  node = vertex
+  for i in xrange(num_parents):
+    if node.parent != None:
+      node = node.parent
+
+  return node
+
+def lca_finite_tree(vertex1, vertex2):
+  h1, h2 = find_height(vertex1), find_height(vertex2)
+
+  if h2 < h1:
+    vertex2 = climb_parents(vertex2, h1 - h2)
+  elif h2 > h1:
+    vertex1 = climb_parents(vertex1, h2 - h1)
+
+  return lca_same_level(vertex1, vertex2)
+{% endhighlight %}
