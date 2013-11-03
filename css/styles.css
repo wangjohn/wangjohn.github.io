@@ -148,8 +148,6 @@ header ul a {
 
 footer .view, header .view {
   font-size: small;
-  text-align: center;
-  font-weight: 50;
 }
 
 strong {
@@ -175,6 +173,7 @@ header ul a strong {
 
 section {
   width:500px;
+  font-size: medium;
   float:right;
   padding-bottom:50px;
 }
