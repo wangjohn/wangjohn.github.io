@@ -102,7 +102,10 @@ def find_ancestor(vertex1, vertex2, step = 2):
     moves_to_make = step ** (num_steps)
     for i in xrange(moves_to_make):
       if climbing_node == resting_node:
-        return climb_to_lca(vertex1, vertex2, count1, count2)
+        if num_steps % 2 == 0:
+          return climb_to_lca(vertex1, vertex2, count1 + i + 1, count2)
+        else:
+          return climb_to_lca(vertex1, vertex2, count1, count2 + i + 1)
       climbing_node = climbing_node.parent
 
     if num_steps % 2 == 0:
@@ -120,7 +123,7 @@ Let's look at correctness a little more. Let j = ceiling(lg(2k)) be the smallest
 
 This analysis also shows that the runtime is O(k) because you never do more than O(2<sup>j+1</sup>) = O(k) parent traversals.
 
-# Connections
+# Addendum
 [Timsort][timsort] (the sorting mechanism behind Python) actually uses galloping when merging two sorted lists.
 
 [timsort]: http://en.wikipedia.org/wiki/Timsort
