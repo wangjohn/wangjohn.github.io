@@ -114,11 +114,11 @@ def find_ancestor(vertex1, vertex2, step = 2):
     num_steps += 1
 {% endhighlight %}
 
-This algorithm will find the lowest common ancestor, and will do so in `O(k)` time, where k = max(d(v<sub>1</sub>, l), d(v<sub>2</sub>, l)) is the maximum height between a starting vertex and the lowest common ancestor `l`. The correctness of the algorithm comes from the fact that at some point, the difference between the two vertices will be covered.
+This algorithm will find the lowest common ancestor, and will do so in O(k) time, where k = max(d(v<sub>1</sub>, l), d(v<sub>2</sub>, l)) is the maximum height between a starting vertex and the lowest common ancestor l. The correctness of the algorithm comes from the fact that at some point, the difference between the two vertices will be covered.
 
-Let's look at correctness a little more. Let `j = ceiling(lg(2k))` be the smallest number such that 2<sup>j</sup> > 2k. After we have done `j` alternating gallops, it must be the case that we'll find an ancestor on the next gallop (in fact most likely before, but all we need to do is show that we'll eventually find an ancestor). This is because in the next gallop, the node which is moving must at some point reach the stationary node. Note that the difference in the levels of vertex 1 and 2 is at most `k` so that the two vertices are within `k` nodes of each other. Since the `j`th gallop covers `2k` nodes, it must be the case that during the `j`th gallop, the two nodes meet. This works because there is the invariant that the nodes are never more than 2<sup>j</sup> further apart from each other than they originally started.
+Let's look at correctness a little more. Let j = ceiling(lg(2k)) be the smallest number such that 2<sup>j</sup> > 2k. After we have done j alternating gallops, it must be the case that we'll find an ancestor on the next gallop (in fact most likely before, but all we need to do is show that we'll eventually find an ancestor). This is because in the next gallop, the node which is moving must at some point reach the stationary node. Note that the difference in the levels of vertex 1 and 2 is at most k so that the two vertices are within k nodes of each other. Since the jth gallop covers 2k nodes, it must be the case that during the jth gallop, the two nodes meet. This works because there is the invariant that the nodes are never more than 2<sup>j</sup> further apart from each other than they originally started.
 
-This analysis also shows that the runtime is `O(k)` because you never do more than O(2<sup>j+1</sup>) = O(k) parent traversals.
+This analysis also shows that the runtime is O(k) because you never do more than O(2<sup>j+1</sup>) = O(k) parent traversals.
 
 # Connections
 [Timsort][timsort] (the sorting mechanism behind Python) actually uses galloping when merging two sorted lists.
