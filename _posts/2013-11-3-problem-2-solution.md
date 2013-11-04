@@ -13,7 +13,7 @@ After the simplifications, we'll apply some concepts that are used a lot in solv
 
 # Simplifications
 
-The simplest problem that we could solve would probably be a finite tree with our two vertices `v~1~` and `v~2~` being on the same level of the tree. In this case, you can just sequentially walk up with each reference until the two references are on the same object. Assuming we are given two vertices which must be in the same tree, at some point the two references will necessarily be the same. Some python pseudocode is given below:
+The simplest problem that we could solve would probably be a finite tree with our two vertices v<sub>1</sub> and v<sub>2</sub> being on the same level of the tree. In this case, you can just sequentially walk up with each reference until the two references are on the same object. Assuming we are given two vertices which must be in the same tree, at some point the two references will necessarily be the same. Some python pseudocode is given below:
 
 {% highlight python %}
 def lca_same_level(vertex1, vertex2):
@@ -114,11 +114,11 @@ def find_ancestor(vertex1, vertex2, step = 2):
     num_steps += 1
 {% endhighlight %}
 
-This algorithm will find the lowest common ancestor, and will do so in `O(k)` time, where `k = max(d(v~1~, l), d(v~2~, l))` is the maximum height between a starting vertex and the lowest common ancestor `l`. The correctness of the algorithm comes from the fact that at some point, the difference between the two vertices will be covered.
+This algorithm will find the lowest common ancestor, and will do so in `O(k)` time, where k = max(d(v<sub>1</sub>, l), d(v<sub>2</sub>, l)) is the maximum height between a starting vertex and the lowest common ancestor `l`. The correctness of the algorithm comes from the fact that at some point, the difference between the two vertices will be covered.
 
-Let's look at correctness a little more. Let `j = ceiling(lg(2k))` be the smallest number such that `2^j^ > 2k`. After we have done `j` alternating gallops, it must be the case that we'll find an ancestor on the next gallop (in fact most likely before, but all we need to do is show that we'll eventually find an ancestor). This is because in the next gallop, the node which is moving must at some point reach the stationary node. Note that the difference in the levels of vertex 1 and 2 is at most `k` so that the two vertices are within `k` nodes of each other. Since the `j`th gallop covers `2k` nodes, it must be the case that during the `j`th gallop, the two nodes meet. This works because there is the invariant that the nodes are never more than `2^j^` further apart from each other than they originally started.
+Let's look at correctness a little more. Let `j = ceiling(lg(2k))` be the smallest number such that 2<sup>j</sup> > 2k. After we have done `j` alternating gallops, it must be the case that we'll find an ancestor on the next gallop (in fact most likely before, but all we need to do is show that we'll eventually find an ancestor). This is because in the next gallop, the node which is moving must at some point reach the stationary node. Note that the difference in the levels of vertex 1 and 2 is at most `k` so that the two vertices are within `k` nodes of each other. Since the `j`th gallop covers `2k` nodes, it must be the case that during the `j`th gallop, the two nodes meet. This works because there is the invariant that the nodes are never more than 2<sup>j</sup> further apart from each other than they originally started.
 
-This analysis also shows that the runtime is `O(k)` because you never do more than `O(2^j+1^) = O(k)` parent traversals.
+This analysis also shows that the runtime is `O(k)` because you never do more than O(2<sup>j+1</sup>) = O(k) parent traversals.
 
 # Connections
 [Timsort][timsort] (the sorting mechanism behind Python) actually uses galloping when merging two sorted lists.
